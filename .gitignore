@@ -1,0 +1,9 @@
+*~
+._*
+.DS_Store
+Thumbs.db
+
+/data/db.sqlite
+/cache/*
+/logs/*
+*.swp
