@@ -73,11 +73,13 @@ class AaiAPIModule extends APIModule {
 					$this->raiseError(3);	
 				}
 
-				$target = $this->getModuleVar('target','urls');
+				// check target
+				if( !isset($this->args['target']) ){
+					$this->raiseError(4);	
+				}
 
-				// Initialize session; Ask for the moodle httpswwwroot and set the MoodleSession cookie.
-				// This first httpGet request returns error(5) because the aai_session_cookie is not set yet.
-				$result = $this->httpGet($target);
+				// request
+				$result = $this->httpGet($this->args['target']);
 
 				$this->setResponse($this->get_session());
 				$this->setResponseVersion(1);
@@ -94,10 +96,13 @@ class AaiAPIModule extends APIModule {
 		$this->request_number += 1;
 		if($this->request_number > $this->request_limit) {
 			if(isset($this->args['verbose'])) {
-				print_r('!!!!!!!!!!!!!!!!!limit reached!!!!!!!!!!!!!!!!!!!!!!!!');
+				print_r("\n\n!!!!!!!!!!!!!!!!!limit reached!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 			}
 			return true;
 		} else {
+			if(isset($this->args['verbose'])) {
+				print_r("\n\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> request number: $this->request_number <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n\n");
+			}
 			return false;
 		}
 	}
@@ -258,7 +263,7 @@ class AaiAPIModule extends APIModule {
 						return $this->httpPost($form['action'], $form['data'], $response_cookies);
 					} else {
 						// not authenticated and no forms in the page
-						$this->raiseError(4);	
+						$this->raiseError(5);	
 					}
 				} 
 				break;	
@@ -386,6 +391,10 @@ class AaiAPIModule extends APIModule {
 				$error->message = 'The password is missing.';
 				break;
 			case 4:
+				$error->title = 'Target url missing';
+				$error->message = 'The target url is missing. Please check your request.';
+				break;
+			case 5:
 				$error->title = 'AAI session cookie';
 				$error->message = 'The AAI session cookie has not been set.';
 				break;
