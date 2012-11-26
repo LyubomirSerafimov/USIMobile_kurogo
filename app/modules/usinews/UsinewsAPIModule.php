@@ -110,7 +110,7 @@ class UsinewsAPIModule extends APIModule {
 				break;
 			case 3:
 				$error->title = 'Getting the details';
-				$error->message = 'Malformed request. Missing the doc_id parameter.';
+				$error->message = 'Malformed request. Missing the id parameter.';
 				break;
 			case 4:
 				$error->title = 'Getting the details';
