@@ -28,6 +28,7 @@ Kurogo is a PHP application. It is currently qualified for use with
    * URL Rewrite Module 2.0
 * PHP 5.2 (5.3 recommended) or higher with the following extensions
     * zlib, xml, dom, json, pdo, mbstring, LDAP, curl
+* pecl_http module
 
 ## Installation
 After the Kurogo Framework setup clone this repository in your site directory.
