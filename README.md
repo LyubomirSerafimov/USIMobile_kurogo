@@ -28,3 +28,13 @@ Kurogo is a PHP application. It is currently qualified for use with
    * URL Rewrite Module 2.0
 * PHP 5.2 (5.3 recommended) or higher with the following extensions
     * zlib, xml, dom, json, pdo, mbstring, LDAP, curl
+
+## Installation
+After the Kurogo Framework setup clone this repository in your site directory.
+
+* cd KUROGO_HOME_DIRECTORY/site
+* git clone git://github.com/arael/USIMobile_kurogo.git usi
+
+Open your KUROGO_HOME_DIRECTORY/config/kurogo.ini file and set: ACTIVE_SITE = "usi"
+
+Refer to the Kurogo online guide for troubleshooting.
