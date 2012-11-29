@@ -30,7 +30,7 @@ class UsinewsAPIModule extends APIModule {
 				$this->setResponse($list);
 				$this->setResponseVersion(1);
 				break;
-			case 'get':
+			case 'get_item':
 				$details = $this->getDetails();
 				$this->setResponse($details);
 				$this->setResponseVersion(1);
