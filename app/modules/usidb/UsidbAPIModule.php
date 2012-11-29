@@ -35,6 +35,11 @@ class UsidbAPIModule extends APIModule {
 				$this->setResponse($people);
 				$this->setResponseVersion(1);
 				break;
+			case 'get_version':
+				$version = $this->getVersion();
+				$this->setResponse($version);
+				$this->setResponseVersion(1);
+				break;
 			default:
 				$this->invalidCommand();
 				break;
@@ -70,6 +75,12 @@ class UsidbAPIModule extends APIModule {
 
 	private function getPeople(){
 		$sql = "SELECT * FROM People";
+		$result = $this->query($sql);
+		return $result;
+	}
+
+	private function getVersion(){
+		$sql = "SELECT @@VERSION";
 		$result = $this->query($sql);
 		return $result;
 	}
