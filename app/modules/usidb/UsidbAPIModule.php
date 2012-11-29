@@ -30,38 +30,48 @@ class UsidbAPIModule extends APIModule {
 				$this->setResponse($courses);
 				$this->setResponseVersion(1);
 				break;
+			case 'get_people':
+				$people = $this->getPeople();
+				$this->setResponse($people);
+				$this->setResponseVersion(1);
+				break;
 			default:
 				$this->invalidCommand();
 				break;
 		}
 	}
 
-	private function getDBConfig(){
-		return array(
-			'DB_TYPE'   => $this->getModuleVar('DB_TYPE', 'database'),
-			'DB_HOST' 	=> $this->getModuleVar('DB_HOST', 'database'),
-			'DB_USER' 	=> $this->getModuleVar('DB_USER', 'database'),
-			'DB_PASS'   => $this->getModuleVar('DB_PASS', 'database'),
-			'DB_DBNAME' => $this->getModuleVar('DB_DBNAME', 'database'),
-			'DB_CREATE' => $this->getModuleVar('DB_CREATE', 'database'),
-			'DB_FILE'   => $this->getModuleVar('DB_FILE', 'database'),
-			'DB_DEBUG'  => $this->getModuleVar('DB_DEBUG', 'database'),
-		);
+	private function query($sql) {
+		$DB_HOST = $this->getModuleVar('DB_HOST', 'database');
+		$DB_USER = $this->getModuleVar('DB_USER', 'database');
+		$DB_PASS = $this->getModuleVar('DB_PASS', 'database');
+		$DB_DBNAME = $this->getModuleVar('DB_DBNAME', 'database');
+		$connection = mssql_connect($DB_HOST, $DB_USER, $DB_PASS);
+		if($connection != false) {
+			
+			if(mssql_select_db($DB_DBNAME, $connection)) {
+				$query_result = mssql_query($sql);
+				$row = mssql_fetch_array($query_result);
+				return $row;
+			} else {
+				$this->raiseError(1);
+			}
+		
+		} else {
+			$this->raiseError(0);
+		}
 	}
 
 	private function getCourses(){
-		try {
-			$config = $this->getDBConfig();
-			$db = new db($config);
-			$sql = "SELECT * FROM Corsi";
-			$result = $db->query($sql);
-			$row = $result->fetch();
-			return $row;
-		} catch (PDOException $e) {
-			print "Error!: " . $e->getMessage() . "<br/>";
-			die();
-			//$this->raiseError(0);
-		}
+		$sql = "SELECT * FROM Corsi";
+		$result = $this->query($sql);
+		return $result;
+	}
+
+	private function getPeople(){
+		$sql = "SELECT * FROM People";
+		$result = $this->query($sql);
+		return $result;
 	}
 
 	public function raiseError($code) {
@@ -71,12 +81,12 @@ class UsidbAPIModule extends APIModule {
 
 		switch ($code) {
 			case 0:
-				$error->title = 'Usidb: Menu mensa';
-				$error->message = 'Getting the menu failed. No information available in the database.';
+				$error->title = 'Connection attempt';
+				$error->message = 'Connection to the USI DB failed.';
 				break;
 			default:
-				$error->title = 'Unknown error';
-				$error->message = 'Unknown error occured';
+				$error->title = 'Database selection';
+				$error->message = 'Selecting the database failed';
 		}
 		$this->throwError($error);
 	}
