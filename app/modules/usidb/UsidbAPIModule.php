@@ -93,11 +93,14 @@ class UsidbAPIModule extends APIModule {
 		switch ($code) {
 			case 0:
 				$error->title = 'Connection attempt';
-				$error->message = 'Connection to the USI DB failed.';
+				$error->message = 'Connection to the USI DB failed. Last message:' . mssql_get_last_message();
 				break;
-			default:
+			case 1:
 				$error->title = 'Database selection';
-				$error->message = 'Selecting the database failed';
+				$error->message = 'Selecting the database failed. Last message:' . mssql_get_last_message();
+			default:
+				$error->title = 'USIDB Module';
+				$error->message = 'Unknown error. Last message:' . mssql_get_last_message();
 		}
 		$this->throwError($error);
 	}
