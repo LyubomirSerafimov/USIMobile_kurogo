@@ -36,23 +36,52 @@ class UpdatesAPIModule extends APIModule {
 		}
 	}
 
-	private function getUpdates(){ 
+	private function getUpdates() {
 		$update = array();
-		$mensa = $this->getMensaUpdate();
-		$update['menumensa'] = $mensa['timemodify'];
+		$update['menumensa'] = $this->getMenuMensaHash();
+		$update['teachingtimetables'] = $this->getTeachingTimetablesHash();
 		return $update;
 	}
 
-	private function getMensaUpdate(){
+	private function hash($arg) {
+		if(is_array($arg)) {
+			$content = '';
+			foreach($arg as $entry) {
+				foreach($entry as $key=>$value) {
+					$content.=$value;
+				}
+			}
+			return md5($content);
+		} else if(is_string($arg) or is_numeric($arg)) {
+			return md5($arg);
+		} else {
+			return false;
+		}
+	}
+
+	private function getMenuMensaHash() {
 		$table = $this->getModuleVar('menumensa','db_tables');
 		$db = new db();
 		$sql = "SELECT timemodify FROM $table limit 1";
 		$result = $db->query($sql);
 		$row = $result->fetch();
-		if($row == false){
+		if($row == false) {
 			$this->raiseError(0);
 		} else {
-			return $row;
+			return $this->hash($row['timemodify']);
+		}
+	}
+
+	private function getTeachingTimetablesHash() {
+		$table = $this->getModuleVar('teachingtimetables','db_tables');
+		$db = new db();
+		$sql = "SELECT timemodify FROM $table";
+		$result = $db->query($sql);
+		$row = $result->fetchAll();
+		if($row == false) {
+			$this->raiseError(0);
+		} else {
+			return $this->hash($row);
 		}
 	}
 
@@ -72,5 +101,4 @@ class UpdatesAPIModule extends APIModule {
 		}
 		$this->throwError($error);
 	}
-
 }

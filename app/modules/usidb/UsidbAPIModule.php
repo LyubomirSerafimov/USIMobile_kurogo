@@ -40,6 +40,11 @@ class UsidbAPIModule extends APIModule {
 				$this->setResponse($version);
 				$this->setResponseVersion(1);
 				break;
+			case 'test':
+				$version = $this->test();
+				$this->setResponse($version);
+				$this->setResponseVersion(1);
+				break;
 			default:
 				$this->invalidCommand();
 				break;
@@ -52,12 +57,16 @@ class UsidbAPIModule extends APIModule {
 		$DB_PASS = $this->getModuleVar('DB_PASS', 'database');
 		$DB_DBNAME = $this->getModuleVar('DB_DBNAME', 'database');
 		$connection = mssql_connect($DB_HOST, $DB_USER, $DB_PASS);
+
 		if($connection != false) {
 			
 			if(mssql_select_db($DB_DBNAME, $connection)) {
 				$query_result = mssql_query($sql);
-				$row = mssql_fetch_array($query_result);
-				return $row;
+				$result = array();
+				while($row = mssql_fetch_array($query_result)){
+					$result[] = $row;
+				}
+				return $result;
 			} else {
 				$this->raiseError(1);
 			}
@@ -81,6 +90,16 @@ class UsidbAPIModule extends APIModule {
 
 	private function getVersion(){
 		$sql = "SELECT @@VERSION";
+		$result = $this->query($sql);
+		return $result;
+	}
+
+	private function test(){
+		$sql = "exec sp_tables";
+		//$sql = "select * FROM  AttivitaSport";
+		//$sql = "select * FROM  Corsi";
+		//$sql = "exec sp_help AttivitaSport";
+		//$sql = "select * FROM  USIMobile";
 		$result = $this->query($sql);
 		return $result;
 	}
