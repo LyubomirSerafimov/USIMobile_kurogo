@@ -38,16 +38,20 @@ class UpdatesAPIModule extends APIModule {
 
 	private function getUpdates() {
 		$update = array();
-		$update['menumensa'] = $this->getMenuMensaHash();
+		$update['courses'] = $this->getCoursesHash();
 		$update['teachingtimetables'] = $this->getTeachingTimetablesHash();
+		$update['usinews'] = $this->getUSINewsHash();
+		$update['menumensa'] = $this->getMenuMensaHash();
 		return $update;
 	}
 
 	private function hash($arg) {
-		if(is_array($arg)) {
+		if(is_array($arg) || is_object($arg)) {
 			$content = '';
-			foreach($arg as $entry) {
-				foreach($entry as $key=>$value) {
+			foreach($arg as $key => $value) {
+				if(is_array($value) || is_object($value)) {
+					$content.=$this->hash($value);
+				} else {
 					$content.=$value;
 				}
 			}
@@ -59,17 +63,14 @@ class UpdatesAPIModule extends APIModule {
 		}
 	}
 
-	private function getMenuMensaHash() {
-		$table = $this->getModuleVar('menumensa','db_tables');
-		$db = new db();
-		$sql = "SELECT timemodify FROM $table limit 1";
-		$result = $db->query($sql);
-		$row = $result->fetch();
-		if($row == false) {
-			$this->raiseError(0);
-		} else {
-			return $this->hash($row['timemodify']);
+	private function getCoursesHash(){
+		$usidb = new USIdb();
+		$result = $usidb->getCourses();
+		// check for errors
+		if(KurogoError::isError($result)) {
+			$this->throwError($result);
 		}
+		return $this->hash($result);
 	}
 
 	private function getTeachingTimetablesHash() {
@@ -85,15 +86,43 @@ class UpdatesAPIModule extends APIModule {
 		}
 	}
 
-	public function raiseError($code) {
+	private function getUSINewsHash() {
+		$usinews = new USInews();
+		$result = $usinews->getList();
+		// check for errors
+		if(KurogoError::isError($result)) {
+			$this->throwError($result);
+		} else {
+			return $this->hash($result);
+		}
+	}
 
+	private function getMenuMensaHash() {
+		$table = $this->getModuleVar('menumensa','db_tables');
+		$db = new db();
+		$sql = "SELECT timemodify FROM $table limit 1";
+		$result = $db->query($sql);
+		$row = $result->fetch();
+		if($row == false) {
+			$this->raiseError(1);
+		} else {
+			return $this->hash($row['timemodify']);
+		}
+	}
+
+
+	public function raiseError($code) {
 		$error = new KurogoError();
 		$error->code = $code;
 
 		switch ($code) {
 			case 0:
+				$error->title = 'Updates: Teaching Timetables';
+				$error->message = 'Getting the hash check on Teaching Timetables failed.';
+				break;
+			case 1:
 				$error->title = 'Updates: Menu mensa';
-				$error->message = 'Getting the menu failed. No information available in the database.';
+				$error->message = 'Getting the hash check on Mensa Menu failed.';
 				break;
 			default:
 				$error->title = 'Unknown error';
