@@ -39,7 +39,9 @@ class UpdatesAPIModule extends APIModule {
 	private function getUpdates() {
 		$update = array();
 		$update['courses'] = $this->getCoursesHash();
+		$update['academiccalendar'] = $this->getAcademicCalendarHash();
 		$update['teachingtimetables'] = $this->getTeachingTimetablesHash();
+		$update['examinationtimetables'] = $this->getExaminationTimetablesHash();
 		$update['usinews'] = $this->getUSINewsHash();
 		$update['menumensa'] = $this->getMenuMensaHash();
 		return $update;
@@ -73,16 +75,42 @@ class UpdatesAPIModule extends APIModule {
 		return $this->hash($result);
 	}
 
+	private function getAcademicCalendarHash() {
+		$table = $this->getModuleVar('academiccalendar','db_tables');
+		$db = new db();
+		$sql = "SELECT timemodify FROM $table limit 1";
+		$result = $db->query($sql);
+		$row = $result->fetch();
+		if($row == false) {
+			$this->raiseError(0);
+		} else {
+			return $this->hash($row['timemodify']);
+		}
+	}
+
 	private function getTeachingTimetablesHash() {
 		$table = $this->getModuleVar('teachingtimetables','db_tables');
 		$db = new db();
 		$sql = "SELECT timemodify FROM $table";
 		$result = $db->query($sql);
-		$row = $result->fetchAll();
-		if($row == false) {
-			$this->raiseError(0);
+		$entries = $result->fetchAll();
+		if($entries == false) {
+			$this->raiseError(1);
 		} else {
-			return $this->hash($row);
+			return $this->hash($entries);
+		}
+	}
+
+	private function getExaminationTimetablesHash() {
+		$table = $this->getModuleVar('examinationtimetables','db_tables');
+		$db = new db();
+		$sql = "SELECT timemodify FROM $table";
+		$result = $db->query($sql);
+		$entries = $result->fetchAll();
+		if($entries == false) {
+			$this->raiseError(2);
+		} else {
+			return $this->hash($entries);
 		}
 	}
 
@@ -104,7 +132,7 @@ class UpdatesAPIModule extends APIModule {
 		$result = $db->query($sql);
 		$row = $result->fetch();
 		if($row == false) {
-			$this->raiseError(1);
+			$this->raiseError(3);
 		} else {
 			return $this->hash($row['timemodify']);
 		}
@@ -117,10 +145,19 @@ class UpdatesAPIModule extends APIModule {
 
 		switch ($code) {
 			case 0:
+				$error->title = 'Updates: Academic Calendar';
+				$error->message = 'Getting the hash check on Academic Calendar failed.';
+				break;
+			case 1:
 				$error->title = 'Updates: Teaching Timetables';
 				$error->message = 'Getting the hash check on Teaching Timetables failed.';
 				break;
-			case 1:
+			case 2:
+				$error->title = 'Updates: Examination Timetables';
+				$error->message = 'Getting the hash check on Examination Timetables failed.';
+				break;
+
+			case 3:
 				$error->title = 'Updates: Menu mensa';
 				$error->message = 'Getting the hash check on Mensa Menu failed.';
 				break;

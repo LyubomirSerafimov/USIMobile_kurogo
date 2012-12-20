@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: usilu_mobiledev
 -- ------------------------------------------------------
--- Server version	5.5.28-0ubuntu0.12.10.1
+-- Server version	5.5.28-0ubuntu0.12.10.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,6 +16,46 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `AcademicCalendar`
+--
+
+DROP TABLE IF EXISTS `AcademicCalendar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `AcademicCalendar` (
+  `year` varchar(50) DEFAULT NULL,
+  `url` varchar(200) DEFAULT NULL,
+  `filename` varchar(100) DEFAULT NULL,
+  `mime` varchar(50) DEFAULT NULL,
+  `timemodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ExaminationTimetables`
+--
+
+DROP TABLE IF EXISTS `ExaminationTimetables`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ExaminationTimetables` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `level` enum('bachelor','master') DEFAULT NULL,
+  `faculty` enum('com','eco','info','arch') DEFAULT NULL,
+  `session` varchar(100) DEFAULT NULL,
+  `registration_begin` date DEFAULT NULL,
+  `registration_end` date DEFAULT NULL,
+  `examination_begin` date DEFAULT NULL,
+  `examination_end` date DEFAULT NULL,
+  `filename` varchar(100) DEFAULT NULL,
+  `mime` varchar(50) DEFAULT NULL,
+  `url` varchar(200) DEFAULT NULL,
+  `timemodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `MenuMensa`
 --
 
@@ -26,7 +66,7 @@ CREATE TABLE `MenuMensa` (
   `url` varchar(500) DEFAULT NULL,
   `filename` varchar(100) DEFAULT NULL,
   `mime` varchar(50) DEFAULT NULL,
-  `timemodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `timemodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -45,10 +85,10 @@ CREATE TABLE `TeachingTimetables` (
   `semester` enum('fall','spring') DEFAULT NULL,
   `filename` varchar(100) DEFAULT NULL,
   `mime` varchar(50) DEFAULT NULL,
-  `url` varchar(500) DEFAULT NULL,
-  `timemodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `url` varchar(200) DEFAULT NULL,
+  `timemodify` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -60,4 +100,4 @@ CREATE TABLE `TeachingTimetables` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-12-05 16:28:39
+-- Dump completed on 2012-12-20 11:50:27
