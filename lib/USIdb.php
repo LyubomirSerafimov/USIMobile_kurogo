@@ -54,7 +54,7 @@ class USIdb {
 		$sql.= "convert(varchar(11), Inizio_semestre, 106) as semester_begin, ";
 		$sql.= "convert(varchar(11), Fine_semestre, 106) as semester_end, ";
 		$sql.= "Crediti as credits ";
-		$sql.= "from Corsi ";
+		$sql.= "from Corsi";
 		$usidb = new USIdb();
 		$result = $usidb->query($sql);
 		if($result == false) {
@@ -63,14 +63,42 @@ class USIdb {
 		return $result;
 	}
 
-	public function getCoursesRaw(){
-		$sql = "select * from Corsi";
+	public function getCoursesHash(){
+		$sql = "select convert(binary(4), checksum_agg(checksum(*))) from Corsi";
 		$usidb = new USIdb();
 		$result = $usidb->query($sql);
 		if($result == false) {
-			return $this->error(0);
+			return $this->error(1);
+		}
+		return md5($result[0][0]);
+	}
+
+
+	public function getPeople(){
+		$sql = "select ";
+		$sql.= "id_persona as id, ";
+		$sql.= "cognome as lastname, ";
+		$sql.= "nome as firstname, ";
+		$sql.= "email, ";
+		$sql.= "nr_tel as phone, ";
+		$sql.= "Locale_Piano as floor ";
+		$sql.= "from Persone_Ruoli_Uffici";
+		$usidb = new USIdb();
+		$result = $usidb->query($sql);
+		if($result == false) {
+			return $this->error(2);
 		}
 		return $result;
+	}
+
+	public function getPeopleHash(){
+		$sql = "select convert(binary(4), checksum_agg(checksum(*))) from Persone_Ruoli_Uffici";
+		$usidb = new USIdb();
+		$result = $usidb->query($sql);
+		if($result == false) {
+			return $this->error(3);
+		}
+		return md5($result[0][0]);
 	}
 
 	public function error($code) {
@@ -84,8 +112,16 @@ class USIdb {
 				$error->message = 'Getting Courses data failed: ' . mssql_get_last_message();
 				break;
 			case 1:
-				$error->title = 'USIdb: Getting Courses - Raw Data';
-				$error->message = 'Getting Courses raw data failed: ' . mssql_get_last_message();
+				$error->title = 'USIdb: Getting Courses Checksum';
+				$error->message = 'Getting Courses checksum failed: ' . mssql_get_last_message();
+				break;
+			case 2:
+				$error->title = 'USIdb: Getting People';
+				$error->message = 'Getting People data failed: ' . mssql_get_last_message();
+				break;
+			case 3:
+				$error->title = 'USIdb: Getting People Checksum';
+				$error->message = 'Getting People checksum failed: ' . mssql_get_last_message();
 				break;
 			default:
 				$error->title = 'USIdb: Unknown error';

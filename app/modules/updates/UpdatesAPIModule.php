@@ -39,6 +39,7 @@ class UpdatesAPIModule extends APIModule {
 	private function getUpdates() {
 		$update = array();
 		$update['courses'] = $this->getCoursesHash();
+		$update['people'] = $this->getPeopleHash();
 		$update['academiccalendar'] = $this->getAcademicCalendarHash();
 		$update['teachingtimetables'] = $this->getTeachingTimetablesHash();
 		$update['examinationtimetables'] = $this->getExaminationTimetablesHash();
@@ -67,12 +68,22 @@ class UpdatesAPIModule extends APIModule {
 
 	private function getCoursesHash(){
 		$usidb = new USIdb();
-		$result = $usidb->getCourses();
+		$hash = $usidb->getCoursesHash();
 		// check for errors
-		if(KurogoError::isError($result)) {
-			$this->throwError($result);
+		if(KurogoError::isError($hash)) {
+			$this->throwError($hash);
 		}
-		return $this->hash($result);
+		return $hash;
+	}
+
+	private function getPeopleHash(){
+		$usidb = new USIdb();
+		$hash = $usidb->getPeopleHash();
+		// check for errors
+		if(KurogoError::isError($hash)) {
+			$this->throwError($hash);
+		}
+		return $hash;
 	}
 
 	private function getAcademicCalendarHash() {
