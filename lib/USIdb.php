@@ -28,7 +28,7 @@ class USIdb {
 			if(mssql_select_db($this->config['DB_DBNAME'], $connection)) {
 				$query_result = mssql_query($sql);
 				$result = array();
-				while($row = mssql_fetch_array($query_result)){
+				while($row = mssql_fetch_assoc($query_result)){
 					$result[] = $row;
 				}
 				return $result;
@@ -70,9 +70,8 @@ class USIdb {
 		if($result == false) {
 			return $this->error(1);
 		}
-		return md5($result[0][0]);
+		return md5($result[0]['computed']);
 	}
-
 
 	public function getPeople(){
 		$sql = "select ";
@@ -98,7 +97,54 @@ class USIdb {
 		if($result == false) {
 			return $this->error(3);
 		}
-		return md5($result[0][0]);
+		return md5($result[0]['computed']);
+	}
+
+	public function getSportActivities(){
+		$sql = "select ";
+		$sql.= "nome_attivita as name_it, ";
+		$sql.= "nome_attivita_eng as name_en, ";
+		$sql.= "descrizione_attivita as description_it, ";
+		$sql.= "descrizione_attivita_eng as description_en, ";
+		$sql.= "Categoria as category_it, ";
+		$sql.= "Categoria_eng as category_en, ";
+		$sql.= "Disciplina as discipline_it, ";
+		$sql.= "Disciplina_eng as discipline_en, ";
+		$sql.= "convert(varchar(11), data_inizio, 106) as start_date, ";
+		$sql.= "convert(varchar(11), data_fine, 106) as end_date, ";
+		$sql.= "convert(varchar(11), data_inizio_iscrizione, 106) as subscription_start_date, ";
+		$sql.= "convert(varchar(11), data_fine_iscrizione, 106) as subscription_end_date, ";
+		$sql.= "luogo as location, ";
+		$sql.= "alloggio as lodging_it, ";
+		$sql.= "alloggio_eng as lodging_en, ";
+		$sql.= "rientro as comeback, ";
+		$sql.= "nome_contatto as contact_name, ";
+		$sql.= "mail_contatto as contact_mail, ";
+		$sql.= "trasporto as transport_it, ";
+		$sql.= "trasporto_eng as transport_en, ";
+		$sql.= "requisiti as requirements_it, ";
+		$sql.= "requisiti_eng as requirements_en, ";
+		$sql.= "equipaggiamento as equipment_it, ";
+		$sql.= "equipaggiamento_eng as equipment_en, ";
+		$sql.= "pasti as meal_it, ";
+		$sql.= "pasti_eng as meal_en ";
+		$sql.= "from AttivitaSport";
+		$usidb = new USIdb();
+		$result = $usidb->query($sql);
+		if($result == false) {
+			return $this->error(4);
+		}
+		return $result;
+	}
+
+	public function getSportActivitiesHash(){
+		$sql = "select convert(binary(4), checksum_agg(checksum(*))) from AttivitaSport";
+		$usidb = new USIdb();
+		$result = $usidb->query($sql);
+		if($result == false) {
+			return $this->error(5);
+		}
+		return md5($result[0]['computed']);
 	}
 
 	public function error($code) {
@@ -122,6 +168,14 @@ class USIdb {
 			case 3:
 				$error->title = 'USIdb: Getting People Checksum';
 				$error->message = 'Getting People checksum failed: ' . mssql_get_last_message();
+				break;
+			case 4:
+				$error->title = 'USIdb: Getting Sport Activities';
+				$error->message = 'Getting Sport Activities data failed: ' . mssql_get_last_message();
+				break;
+			case 5:
+				$error->title = 'USIdb: Getting Sport Activities Checksum';
+				$error->message = 'Getting Sport Activities checksum failed: ' . mssql_get_last_message();
 				break;
 			default:
 				$error->title = 'USIdb: Unknown error';

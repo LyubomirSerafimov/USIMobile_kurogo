@@ -45,6 +45,7 @@ class UpdatesAPIModule extends APIModule {
 		$update['examinationtimetables'] = $this->getExaminationTimetablesHash();
 		$update['usinews'] = $this->getUSINewsHash();
 		$update['menumensa'] = $this->getMenuMensaHash();
+		$update['sport'] = $this->getSportActivitiesHash();
 		return $update;
 	}
 
@@ -149,6 +150,15 @@ class UpdatesAPIModule extends APIModule {
 		}
 	}
 
+	private function getSportActivitiesHash(){
+		$usidb = new USIdb();
+		$hash = $usidb->getSportActivitiesHash();
+		// check for errors
+		if(KurogoError::isError($hash)) {
+			$this->throwError($hash);
+		}
+		return $hash;
+	}
 
 	public function raiseError($code) {
 		$error = new KurogoError();
