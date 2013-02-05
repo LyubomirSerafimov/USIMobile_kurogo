@@ -46,6 +46,7 @@ class UpdatesAPIModule extends APIModule {
 		$update['usinews'] = $this->getUSINewsHash();
 		$update['menumensa'] = $this->getMenuMensaHash();
 		$update['sport'] = $this->getSportActivitiesHash();
+		$update['services'] = $this->getServicesHash();
 		return $update;
 	}
 
@@ -158,6 +159,19 @@ class UpdatesAPIModule extends APIModule {
 			$this->throwError($hash);
 		}
 		return $hash;
+	}
+
+	private function getServicesHash() {
+		$table = $this->getModuleVar('services','db_tables');
+		$db = new db();
+		$sql = "SELECT timemodify FROM $table";
+		$result = $db->query($sql);
+		$entries = $result->fetchAll();
+		if($entries == false) {
+			$this->raiseError(1);
+		} else {
+			return $this->hash($entries);
+		}
 	}
 
 	public function raiseError($code) {
