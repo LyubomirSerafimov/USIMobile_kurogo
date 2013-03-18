@@ -2,15 +2,15 @@
 error_reporting(E_ERROR);
 Kurogo::includePackage('db');
 
-class UsieventsAPIModule extends APIModule {
+class UsicommunitynewsAPIModule extends APIModule {
 
-	protected $id='usievents';
+	protected $id='usicommunitynews';
 	protected $vmin = 1;
 	protected $vmax = 1;
 
 	// special factory method for core
-	public static function factory($id='usievents', $command='', $args=array()) {
-		$module = new UsieventsAPIModule();
+	public static function factory($id='usicommunitynews', $command='', $args=array()) {
+		$module = new UsicommunitynewsAPIModule();
 		$module->init($command, $args);
 		return $module;
 	}
@@ -26,8 +26,8 @@ class UsieventsAPIModule extends APIModule {
 				$this->setResponseVersion(1);
 				break;
 			case 'get_list':
-				$usievents = new USIevents();
-				$result = $usievents->getList();
+				$usicommunitynews = new USIcommunityNews();
+				$result = $usicommunitynews->getList();
 				// check for errors
 				if(KurogoError::isError($result)) {
 					$this->throwError($result);
@@ -36,8 +36,8 @@ class UsieventsAPIModule extends APIModule {
 				$this->setResponseVersion(1);
 				break;
 			case 'get_item':
-				$usievents = new USIevents();
-				$result = $usievents->getDetails($this->args['id']);
+				$usicommunitynews = new USIcommunityNews();
+				$result = $usicommunitynews->getDetails($this->args['id']);
 				// check for errors
 				if(KurogoError::isError($result)) { $this->throwError($result); }
 				$this->setResponse($result);
