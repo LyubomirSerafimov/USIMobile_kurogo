@@ -1,11 +1,11 @@
 <?php
 class USIeventNews {
 	
-	private $short_event_news_list_url = "http://swisscast.ticinoricerca.ch/webexport/export_json_documents_list.php?prv_id=1&amp;prv_id=2&amp;prv_id=10&amp;prv_id=12&amp;prv_id=23&amp;prv_id=27&amp;prv_id=38&amp;prv_id=39&amp;prv_id=40&amp;prv_id=41&amp;prv_id=53&amp;prv_id=61&amp;prv_id=63&amp;type=2&amp;excludechannel=1&amp;excludechannel=2&amp;nmax=3&amp;order_by=doc_evt_start_date&amp;order_by=doc_evt_duration_days&amp;evtdatefrom=";
+	private $short_event_news_list_url = 'http://swisscast.ticinoricerca.ch/webexport/export_json_documents_list.php?prv_id=1&prv_id=2&prv_id=10&prv_id=12&prv_id=23&prv_id=27&prv_id=38&prv_id=39&prv_id=40&prv_id=41&prv_id=53&prv_id=61&prv_id=63&type=2&excludechannel=1&excludechannel=2&nmax=10&order_by=doc_evt_start_date&order_by=doc_evt_duration_days&evtdatefrom=';
 	private $detailed_event_news_list_url = "http://swisscast.ticinoricerca.ch/webexport/export_json_document_details.php";
 
 	public function getList(){ 
-		$today = date('d-m-Y');
+		$today = date('Y-m-d');
 		$httpRequest = new HttpRequest($this->short_event_news_list_url.$today, HttpRequest::METH_GET);
 		$httpRequest->send();
 		if( $httpRequest->getResponseCode() == 200) { // OK
