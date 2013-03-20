@@ -5,7 +5,8 @@ class USIcommunityNews {
 	private $detailed_community_news_list_url = "http://swisscast.ticinoricerca.ch/webexport/export_json_document_details.php";
 
 	public function getList(){ 
-		$httpRequest = new HttpRequest($this->short_community_news_list_url.time(), HttpRequest::METH_GET);
+		$today = date('d-m-Y');
+		$httpRequest = new HttpRequest($this->short_community_news_list_url.$today, HttpRequest::METH_GET);
 		$httpRequest->send();
 		if( $httpRequest->getResponseCode() == 200) { // OK
 			$header = $httpRequest->getResponseHeader();

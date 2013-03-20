@@ -43,9 +43,9 @@ class UpdatesAPIModule extends APIModule {
 		$update['academiccalendar'] = $this->getAcademicCalendarHash();
 		$update['teachingtimetables'] = $this->getTeachingTimetablesHash();
 		$update['examinationtimetables'] = $this->getExaminationTimetablesHash();
-		$update['usinews'] = $this->getUSINewsHash();
-		$update['usieventnews'] = $this->getUSIEventNewsHash();
-		$update['usicommunitynews'] = $this->getUSICommunityNewsHash();
+		$update['usinews'] = $this->getUSInewsHash();
+		$update['usieventnews'] = $this->getUSIeventNewsHash();
+		$update['usicommunitynews'] = $this->getUSIcommunityNewsHash();
 		$update['menumensa'] = $this->getMenuMensaHash();
 		$update['sport'] = $this->getSportActivitiesHash();
 		$update['services'] = $this->getServicesHash();
@@ -129,7 +129,7 @@ class UpdatesAPIModule extends APIModule {
 		}
 	}
 
-	private function getUSINewsHash() {
+	private function getUSInewsHash() {
 		$usinews = new USInews();
 		$result = $usinews->getList();
 		// check for errors
@@ -141,7 +141,7 @@ class UpdatesAPIModule extends APIModule {
 	}
 
 	private function getUSIEventNewsHash() {
-		$usieventnews = new USIEventNews();
+		$usieventnews = new USIeventNews();
 		$result = $usieventnews->getList();
 		// check for errors
 		if(KurogoError::isError($result)) {
@@ -151,8 +151,8 @@ class UpdatesAPIModule extends APIModule {
 		}
 	}
 
-	private function getUSICommunityNewsHash() {
-		$usicommunitynews = new USICommunityNews();
+	private function getUSIcommunityNewsHash() {
+		$usicommunitynews = new USIcommunityNews();
 		$result = $usicommunitynews->getList();
 		// check for errors
 		if(KurogoError::isError($result)) {
