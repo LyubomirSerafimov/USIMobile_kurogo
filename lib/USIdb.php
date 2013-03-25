@@ -80,7 +80,10 @@ class USIdb {
 		$sql.= "nome as firstname, ";
 		$sql.= "email, ";
 		$sql.= "nr_tel as phone, ";
-		$sql.= "Locale_Piano as floor ";
+		$sql.= "URL_homepage as url, ";
+		$sql.= "Stabile_Nome as building, ";
+		$sql.= "Locale_Piano as floor, ";
+		$sql.= "Sede1_Nome as headquarter ";
 		$sql.= "from Persone_Ruoli_Uffici";
 		$usidb = new USIdb();
 		$result = $usidb->query($sql);
