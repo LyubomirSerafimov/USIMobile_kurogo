@@ -1,12 +1,10 @@
 <?php
 class USIeventNews {
 	
-	private $short_event_news_list_url = 'http://swisscast.ticinoricerca.ch/webexport/export_json_documents_list.php?prv_id=1&prv_id=2&prv_id=10&prv_id=12&prv_id=23&prv_id=27&prv_id=38&prv_id=39&prv_id=40&prv_id=41&prv_id=53&prv_id=61&prv_id=63&type=2&excludechannel=1&excludechannel=2&nmax=10&order_by=doc_evt_start_date&order_by=doc_evt_duration_days&evtdatefrom=';
-	private $detailed_event_news_list_url = "http://swisscast.ticinoricerca.ch/webexport/export_json_document_details.php";
-
 	public function getList(){ 
 		$today = date('Y-m-d');
-		$httpRequest = new HttpRequest($this->short_event_news_list_url.$today, HttpRequest::METH_GET);
+        $config = Kurogo::siteConfig();
+		$httpRequest = new HttpRequest($config->getVar('SHORT_EVENT_NEWS', 'usi_urls').$today, HttpRequest::METH_GET);
 		$httpRequest->send();
 		if( $httpRequest->getResponseCode() == 200) { // OK
 			$header = $httpRequest->getResponseHeader();
@@ -32,7 +30,8 @@ class USIeventNews {
 		} else {
 			$parameters .= $id;
 		}
-		$httpRequest = new HttpRequest($this->detailed_event_news_list_url.$parameters, HttpRequest::METH_GET);
+        $config = Kurogo::siteConfig();
+		$httpRequest = new HttpRequest($config->getVar('DETAILED_EVENT_NEWS', 'usi_urls').$parameters, HttpRequest::METH_GET);
 		$httpRequest->send();
 		if( $httpRequest->getResponseCode() == 200) { // OK
 			$header = $httpRequest->getResponseHeader();

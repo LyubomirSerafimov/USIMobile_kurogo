@@ -1,6 +1,5 @@
 <?php
 error_reporting(E_ERROR);
-
 class SportAPIModule extends APIModule {
 
 	protected $id='sport';
@@ -34,9 +33,46 @@ class SportAPIModule extends APIModule {
 				$this->setResponse($result);
 				$this->setResponseVersion(1);
 				break;
+			case 'check_membership':
+				$usisport = new USIsportSOAP();
+				$result = $usisport->checkMembership($this->args['username'], $this->args['password']);
+				if(KurogoError::isError($result)) {
+					$this->throwError($result);
+				}
+				$this->setResponse($result);
+				$this->setResponseVersion(1);
+				break;
+			case 'check_subscription':
+				$usisport = new USIsportSOAP();
+				$result = $usisport->checkSubscription($this->args['username'], $this->args['password'], $this->args['activity']);
+				if(KurogoError::isError($result)) {
+					$this->throwError($result);
+				}
+				$this->setResponse($result);
+				$this->setResponseVersion(1);
+				break;
+			case 'subscribe':
+				$usisport = new USIsportSOAP();
+				$result = $usisport->subscribe($this->args['username'], $this->args['password'], $this->args['activity']);
+				if(KurogoError::isError($result)) {
+					$this->throwError($result);
+				}
+				$this->setResponse($result);
+				$this->setResponseVersion(1);
+				break;
+			case 'unsubscribe':
+				$usisport = new USIsportSOAP();
+				$result = $usisport->unsubscribe($this->args['username'], $this->args['password'], $this->args['activity']);
+				if(KurogoError::isError($result)) {
+					$this->throwError($result);
+				}
+				$this->setResponse($result);
+				$this->setResponseVersion(1);
+				break;
+
 			default:
 				$this->invalidCommand();
 				break;
 		}
-	}
+	}   
 }

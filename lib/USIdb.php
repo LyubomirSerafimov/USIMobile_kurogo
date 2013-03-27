@@ -105,6 +105,7 @@ class USIdb {
 
 	public function getSportActivities(){
 		$sql = "select ";
+		$sql.= "id_attivita as id, ";
 		$sql.= "nome_attivita as name_it, ";
 		$sql.= "nome_attivita_eng as name_en, ";
 		$sql.= "descrizione_attivita as description_it, ";

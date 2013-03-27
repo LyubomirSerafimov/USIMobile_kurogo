@@ -1,11 +1,9 @@
 <?php
 class USInews {
 	
-	private $short_news_list_url = "http://swisscast.ticinoricerca.ch/webexport/export_json_documents_list.php?prv_id=23&prv_id=2&prv_id=10&prv_id=11&prv_id=12&prv_id=27&prv_id=29&type=1&order_by=doc_pub_start_date&order_by_criteria=DESC&maxpubstartdays=180";
-	private $detailed_news_list_url = "http://swisscast.ticinoricerca.ch/webexport/export_json_document_details.php";
-
 	public function getList(){ 
-		$httpRequest = new HttpRequest($this->short_news_list_url, HttpRequest::METH_GET);
+        $config = Kurogo::siteConfig();
+		$httpRequest = new HttpRequest($config->getVar('SHORT_NEWS', 'usi_urls'), HttpRequest::METH_GET);
 		$httpRequest->send();
 		if( $httpRequest->getResponseCode() == 200) { // OK
 			$header = $httpRequest->getResponseHeader();
@@ -31,7 +29,9 @@ class USInews {
 		} else {
 			$parameters .= $id;
 		}
-		$httpRequest = new HttpRequest($this->detailed_news_list_url.$parameters, HttpRequest::METH_GET);
+
+        $config = Kurogo::siteConfig();
+		$httpRequest = new HttpRequest($config->getVar('DETAILED_NEWS', 'usi_urls').$parameters, HttpRequest::METH_GET);
 		$httpRequest->send();
 		if( $httpRequest->getResponseCode() == 200) { // OK
 			$header = $httpRequest->getResponseHeader();
