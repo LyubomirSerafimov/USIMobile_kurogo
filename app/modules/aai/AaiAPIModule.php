@@ -59,22 +59,22 @@ class AaiAPIModule extends APIModule {
 
 			case 'authenticate':
 				// check idp attribute
-				if( !isset($this->args['idp']) ){
+				if( !isset($this->args['idp']) or empty($this->args['idp']) ){
 					$this->raiseError(1);	
 				}
 
 				// check username
-				if( !isset($this->args['username']) ){
+				if( !isset($this->args['username']) or empty($this->args['username']) ){
 					$this->raiseError(2);	
 				}
 
 				// check password
-				if( !isset($this->args['password']) ){
+				if( !isset($this->args['password']) or empty($this->args['password'])){
 					$this->raiseError(3);	
 				}
 
 				// check target
-				if( !isset($this->args['target']) ){
+				if( !isset($this->args['target']) or empty($this->args['target']) ){
 					$this->raiseError(4);	
 				}
 
