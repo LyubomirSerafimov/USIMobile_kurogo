@@ -57,35 +57,35 @@ class USIeventNews {
 
 		switch ($code) {
 			case 0:
-				$error->title = 'Getting the USI Event News list';
+				$error->title = 'USI Event News list';
 				$error->message = 'Fetching the Event News list failed.';
 				break;
 			case 1:
-				$error->title = 'Getting the USI Event News list';
+				$error->title = 'USI Event News list';
 				$error->message = 'Wrong data format received.';
 				break;
 			case 2:
-				$error->title = 'Getting the USI Event News list';
+				$error->title = 'USI Event News list';
 				$error->message = 'Internal server error.';
 				break;
 			case 3:
-				$error->title = 'Getting the USI Event News details';
+				$error->title = 'USI Event News details';
 				$error->message = 'Malformed request. Missing the id parameter.';
 				break;
 			case 4:
-				$error->title = 'Getting the USI Event News details';
+				$error->title = 'USI Event News details';
 				$error->message = 'Fetching the detailed new failed.';
 				break;
 			case 5:
-				$error->title = 'Getting the USI Event News details';
+				$error->title = 'USI Event News details';
 				$error->message = 'Wrong data format received.';
 				break;
 			case 6:
-				$error->title = 'Getting the USI Event News details';
+				$error->title = 'USI Event News details';
 				$error->message = 'Internal server error.';
 				break;
 			default:
-				$error->title = 'Unknown error';
+				$error->title = 'USI Event News';
 				$error->message = 'Unknown error occured';
 		}
 		return $error;

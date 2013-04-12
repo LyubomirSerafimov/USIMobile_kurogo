@@ -25,10 +25,19 @@ class BibcatalogAPIModule extends APIModule {
 				$this->setResponse($response);
 				$this->setResponseVersion(1);
 				break;
-			case 'search':
+			case 'search_books':
 				$bibcatalog = new BibCatalog();
-				$result = $bibcatalog->search($this->args);
+				$result = $bibcatalog->searchBooks($this->args);
+				$this->setResponse($result);
+				$this->setResponseVersion(1);
+				break;
+			case 'search_journals':
+				$bibcatalog = new BibCatalog();
+				$result = $bibcatalog->searchJournals($this->args);
 				// check for errors
+				if(KurogoError::isError($result)) {
+					$this->throwError($result);
+				}
 				$this->setResponse($result);
 				$this->setResponseVersion(1);
 				break;
