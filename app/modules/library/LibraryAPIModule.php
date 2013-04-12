@@ -2,15 +2,15 @@
 error_reporting(E_ERROR);
 Kurogo::includePackage('db');
 
-class BibcatalogAPIModule extends APIModule {
+class LibraryAPIModule extends APIModule {
 
-	protected $id='bibcatalog';
+	protected $id='library';
 	protected $vmin = 1;
 	protected $vmax = 1;
 
 	// special factory method for core
-	public static function factory($id='bibcatalog', $command='', $args=array()) {
-		$module = new BibcatalogAPIModule();
+	public static function factory($id='library', $command='', $args=array()) {
+		$module = new LibraryAPIModule();
 		$module->init($command, $args);
 		return $module;
 	}
@@ -26,13 +26,13 @@ class BibcatalogAPIModule extends APIModule {
 				$this->setResponseVersion(1);
 				break;
 			case 'search_books':
-				$bibcatalog = new BibCatalog();
+				$bibcatalog = new LibraryCatalog();
 				$result = $bibcatalog->searchBooks($this->args);
 				$this->setResponse($result);
 				$this->setResponseVersion(1);
 				break;
 			case 'search_journals':
-				$bibcatalog = new BibCatalog();
+				$bibcatalog = new LibraryCatalog();
 				$result = $bibcatalog->searchJournals($this->args);
 				// check for errors
 				if(KurogoError::isError($result)) {

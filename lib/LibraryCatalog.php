@@ -1,7 +1,7 @@
 <?php
 include('swissbib/Header.php');
 
-class BibCatalog { 
+class LibraryCatalog { 
 
 	public function searchBooks($params) {
 		$network = '';
