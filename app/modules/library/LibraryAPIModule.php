@@ -26,14 +26,14 @@ class LibraryAPIModule extends APIModule {
 				$this->setResponseVersion(1);
 				break;
 			case 'search_books':
-				$bibcatalog = new LibraryCatalog();
-				$result = $bibcatalog->searchBooks($this->args);
+				$libraryCatalog = new LibraryCatalog();
+				$result = $libraryCatalog->searchBooks($this->args);
 				$this->setResponse($result);
 				$this->setResponseVersion(1);
 				break;
 			case 'search_journals':
-				$bibcatalog = new LibraryCatalog();
-				$result = $bibcatalog->searchJournals($this->args);
+				$libraryCatalog = new LibraryCatalog();
+				$result = $libraryCatalog->searchJournals($this->args);
 				// check for errors
 				if(KurogoError::isError($result)) {
 					$this->throwError($result);
