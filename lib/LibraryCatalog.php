@@ -62,8 +62,9 @@ class LibraryCatalog {
 		$body = $doc->getElementsByTagName('body');
 		$journals = array();
 		$entry = array();
+		$page_lenght = 10;
 		$numentry = 0;
-		$skip_entry_number = $offset * 10;
+		$skip_entry_number = $offset * $page_lenght;
 		foreach ($body->item(0)->childNodes as $node) {
 			// offset skip 
 			if($numentry <= $skip_entry_number){
@@ -95,7 +96,7 @@ class LibraryCatalog {
 					}
 				}
 			} else if($node->nodeName == 'hr') { // store this node and proceed with the next one
-				if(count($journals) == 10) {
+				if(count($journals) == $page_lenght) {
 					break;
 				}
 				array_push($journals, $entry);
