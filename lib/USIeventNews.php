@@ -3,8 +3,7 @@ class USIeventNews {
 	
 	public function getList(){ 
 		$today = date('Y-m-d');
-        $config = Kurogo::siteConfig();
-		$httpRequest = new HttpRequest($config->getVar('SHORT_EVENT_NEWS', 'usi_urls').$today, HttpRequest::METH_GET);
+		$httpRequest = new HttpRequest(Kurogo::getSiteVar('SHORT_EVENT_NEWS', 'usi_urls').$today, HttpRequest::METH_GET);
 		$httpRequest->send();
 		if( $httpRequest->getResponseCode() == 200) { // OK
 			$header = $httpRequest->getResponseHeader();
@@ -30,8 +29,7 @@ class USIeventNews {
 		} else {
 			$parameters .= $id;
 		}
-        $config = Kurogo::siteConfig();
-		$httpRequest = new HttpRequest($config->getVar('DETAILED_EVENT_NEWS', 'usi_urls').$parameters, HttpRequest::METH_GET);
+		$httpRequest = new HttpRequest(Kurogo::getSiteVar('DETAILED_EVENT_NEWS', 'usi_urls').$parameters, HttpRequest::METH_GET);
 		$httpRequest->send();
 		if( $httpRequest->getResponseCode() == 200) { // OK
 			$header = $httpRequest->getResponseHeader();

@@ -46,4 +46,14 @@ class LibraryAPIModule extends APIModule {
 				break;
 		}
 	}
+
+	// The over-writing of this function is an
+	// ugly hack is to fix the broken json output that occours
+	// from time to time when setting the output with the parent::setResponse function.
+	// At the moment I don't have a clue why this happens. Will fix as soon
+	// as I understand how. =(
+	public function setResponse($result) {
+		echo json_encode( array('response' => $result) );
+		exit;
+	}
 }

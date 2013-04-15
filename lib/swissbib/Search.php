@@ -33,9 +33,10 @@ function search($query, $network=false, $library=false, $offset=1) {
 			array_push($response['results'], $entry);
 		}
 
+
 		$response['nextoffset'] = intval($pxml->nextRecordPosition);
 	}
-	
+
 	/*
 	print_r('<pre>');
 	print_r($response);

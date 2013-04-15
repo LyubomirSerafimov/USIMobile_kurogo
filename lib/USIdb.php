@@ -6,18 +6,12 @@ class USIdb {
 	private $config;
 
     public function __construct($config=null) {
-        if (!is_array($config) || empty($config)) {
-            if (!$config instanceOf Config) {
-                $config = Kurogo::siteConfig();
-            }
-    
-            $this->config = array(
-                'DB_HOST'=>$config->getVar('DB_HOST', 'usi_database'),
-                'DB_USER'=>$config->getVar('DB_USER', 'usi_database'),
-                'DB_PASS'=>$config->getVar('DB_PASS', 'usi_database'),
-                'DB_DBNAME'=>$config->getVar('DB_DBNAME', 'usi_database'),   
-            );
-        }
+		$this->config = array(
+			'DB_HOST'=>Kurogo::getSiteVar('DB_HOST', 'usi_database'),
+			'DB_USER'=>Kurogo::getSiteVar('DB_USER', 'usi_database'),
+			'DB_PASS'=>Kurogo::getSiteVar('DB_PASS', 'usi_database'),
+			'DB_DBNAME'=>Kurogo::getSiteVar('DB_DBNAME', 'usi_database'),   
+		);
     }
 
 	public function query($sql) {

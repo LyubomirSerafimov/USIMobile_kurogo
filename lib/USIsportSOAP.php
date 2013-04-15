@@ -13,8 +13,7 @@ class USIsportSOAP {
 		}
 
 		$params = array('netidlogin' => $username, 'password' => $password);
-		$config = Kurogo::siteConfig();
-		return $this->soapRequest($config->getVar('CHECK_MEMBERSHIP_METHOD', 'usi_sport'), $params);
+		return $this->soapRequest(Kurogo::getSiteVar('CHECK_MEMBERSHIP_METHOD', 'usi_sport'), $params);
 	}
 
 	public function checkSubscription($username, $password, $activity) { 
@@ -32,8 +31,7 @@ class USIsportSOAP {
 		}
 
 		$params = array('netidlogin' => $username, 'password' => $password, 'idAttivita' => $activity);
-		$config = Kurogo::siteConfig();
-		return $this->soapRequest($config->getVar('CHECK_SUBSCRIPTION_METHOD', 'usi_sport'), $params);
+		return $this->soapRequest(Kurogo::getSiteVar('CHECK_SUBSCRIPTION_METHOD', 'usi_sport'), $params);
 	}
 
 	public function subscribe($username, $password, $activity) { 
@@ -51,8 +49,7 @@ class USIsportSOAP {
 		}
 
 		$params = array('netidlogin' => $username, 'password' => $password, 'idAttivita' => $activity);
-		$config = Kurogo::siteConfig();
-		return $this->soapRequest($config->getVar('SUBSCRIBE_METHOD', 'usi_sport'), $params);
+		return $this->soapRequest(Kurogo::getSiteVar('SUBSCRIBE_METHOD', 'usi_sport'), $params);
 	}
 
 	public function unsubscribe($username, $password, $activity) { 
@@ -70,13 +67,11 @@ class USIsportSOAP {
 		}
 
 		$params = array('netidlogin' => $username, 'password' => $password, 'idAttivita' => $activity);
-		$config = Kurogo::siteConfig();
-		return $this->soapRequest($config->getVar('UNSUBSCRIBE_METHOD', 'usi_sport'), $params);
+		return $this->soapRequest(Kurogo::getSiteVar('UNSUBSCRIBE_METHOD', 'usi_sport'), $params);
 	}
 
 	public function soapRequest($method, $params) {
-		$config = Kurogo::siteConfig();
-		$soapClient = new SoapClient($config->getVar('WDSL', 'usi_sport'), array('cache_wsdl' => WSDL_CACHE_NONE));
+		$soapClient = new SoapClient(Kurogo::getSiteVar('WDSL', 'usi_sport'), array('cache_wsdl' => WSDL_CACHE_NONE));
                    
         try {
             $response = $soapClient->__call($method, array($params));

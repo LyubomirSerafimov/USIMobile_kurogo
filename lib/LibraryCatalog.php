@@ -24,13 +24,11 @@ class LibraryCatalog {
 	}
 
 	public function searchJournals($params) {
-		$config = Kurogo::siteConfig();
-		$config->getVar('JOURNAL_BY_LETTER', 'usi_urls');
 		// request
 		if(empty($params['query'])) {
-			$httpRequest = new HttpRequest($config->getVar('JOURNAL_BY_LETTER', 'usi_urls').$params['letter'], HttpRequest::METH_GET);
+			$httpRequest = new HttpRequest(Kurogo::getSiteVar('JOURNAL_BY_LETTER', 'usi_urls').$params['letter'], HttpRequest::METH_GET);
 		} else {
-			$httpRequest = new HttpRequest($config->getVar('JOURNAL_BY_PATTERN', 'usi_urls').$params['query'], HttpRequest::METH_GET);
+			$httpRequest = new HttpRequest(Kurogo::getSiteVar('JOURNAL_BY_PATTERN', 'usi_urls').$params['query'], HttpRequest::METH_GET);
 		}
 
 		$httpRequest->send();
@@ -56,13 +54,13 @@ class LibraryCatalog {
 	// This function is an ad-hoc parses for such a structure.
 	public function htmlJournalListToArray($content, $offset=0) {
 		$doc = new DOMDocument();
-		if(!$doc->loadHTML($content)) {
+		if(!$doc->loadHTML('<?xml version="1.0" encoding="ISO-8859-1"?>'.$content)) {
 			return $this->error(2);
 		}
 		$body = $doc->getElementsByTagName('body');
 		$journals = array();
 		$entry = array();
-		$page_lenght = 10;
+		$page_lenght = 17;
 		$numentry = 0;
 		$skip_entry_number = $offset * $page_lenght;
 		foreach ($body->item(0)->childNodes as $node) {
@@ -82,7 +80,9 @@ class LibraryCatalog {
 				} else if(is_numeric(strpos($node->textContent, 'Collezione: '))){
 					$entry['collection'] = preg_replace('/^ *Collezione: */', '', $node->textContent);
 				} else if(is_numeric(strpos($node->textContent, 'Argomento: '))){
-					$entry['topic'] = preg_replace('/^ *Argomento: */', '', $node->textContent);
+					//$entry['topic'] = utf8_decode(preg_replace('/^ *Argomento: */', '', $node->textContent));
+					//$entry['topic'] = preg_replace('/^ *Argomento: */', '', $node->textContent);
+					$entry['topic'] = '12345678';
 				} else if(is_numeric(strpos($node->textContent, 'Segnatura: '))){
 					$entry['shelfmark'] = preg_replace('/^ *Segnatura: */', '', $node->textContent);
 				} else if(is_numeric(strpos($node->textContent, 'Ultimo fascicolo ricevuto: '))){
@@ -99,7 +99,7 @@ class LibraryCatalog {
 				if(count($journals) == $page_lenght) {
 					break;
 				}
-				array_push($journals, $entry);
+				if($numentry != 16) array_push($journals, $entry);
 				$entry = array();
 			}
 		}
