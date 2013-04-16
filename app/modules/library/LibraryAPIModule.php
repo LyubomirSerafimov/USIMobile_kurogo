@@ -34,10 +34,18 @@ class LibraryAPIModule extends APIModule {
 			case 'search_journals':
 				$libraryCatalog = new LibraryCatalog();
 				$result = $libraryCatalog->searchJournals($this->args);
+
+				/*
 				// check for errors
 				if(KurogoError::isError($result)) {
 					$this->throwError($result);
 				}
+				*/
+
+				if(isset($result->code)) {
+					$this->setError($result);
+				}
+
 				$this->setResponse($result);
 				$this->setResponseVersion(1);
 				break;
@@ -55,6 +63,12 @@ class LibraryAPIModule extends APIModule {
 	public function setResponse($result) {
 		header('Content-Type: application/json');
 		echo json_encode( array('response' => $result) );
+		exit;
+	}
+
+	public function setError($error) {
+		header('Content-Type: application/json');
+		echo json_encode( array('response' => array('error' => $error)) );
 		exit;
 	}
 }

@@ -24,11 +24,14 @@ class LibraryCatalog {
 	}
 
 	public function searchJournals($params) {
+
 		// request
+		//print_r(Kurogo::getSiteVar('JOURNAL_BY_PATTERN', 'usi_urls').$params['query']);
 		if(empty($params['query'])) {
 			$httpRequest = new HttpRequest(Kurogo::getSiteVar('JOURNAL_BY_LETTER', 'usi_urls').$params['letter'], HttpRequest::METH_GET);
 		} else {
-			$httpRequest = new HttpRequest(Kurogo::getSiteVar('JOURNAL_BY_PATTERN', 'usi_urls').$params['query'], HttpRequest::METH_GET);
+			$query = preg_replace('/\s+/', '+', $params['query']);
+			$httpRequest = new HttpRequest(Kurogo::getSiteVar('JOURNAL_BY_PATTERN', 'usi_urls').$query, HttpRequest::METH_GET);
 		}
 
 		$httpRequest->send();
@@ -111,7 +114,8 @@ class LibraryCatalog {
 	}
 
 	public function error($code) {
-		$error = new KurogoError();
+		//$error = new KurogoError();
+		$error = new StdClass();
 		$error->code = $code;
 		$error->title = 'USI Library Journals';
 
