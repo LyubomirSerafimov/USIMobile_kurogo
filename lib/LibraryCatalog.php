@@ -65,7 +65,8 @@ class LibraryCatalog {
 		$entry = array();
 		$page_lenght = 17;
 		$numentry = 0;
-		$skip_entry_number = $offset * $page_lenght;
+		//$skip_entry_number = $offset * $page_lenght;
+		$skip_entry_number = $offset;
 		foreach ($body->item(0)->childNodes as $node) {
 			// offset skip 
 			if($numentry <= $skip_entry_number){
