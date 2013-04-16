@@ -55,21 +55,23 @@ class LibraryCatalog {
 	// This means that every journal entry in the html page is a list
 	// of paragraphs terminated by an hr occourence.
 	// This function is an ad-hoc parses for such a structure.
-	public function htmlJournalListToArray($content, $offset=0) {
+	public function htmlJournalListToArray($content, $offset=1) {
 		$doc = new DOMDocument();
+		/*
 		if(!$doc->loadHTML('<?xml version="1.0" encoding="ISO-8859-1"?>'.$content)) {
+		*/
+		if(!$doc->loadHTML($content)) {
 			return $this->error(2);
 		}
 		$body = $doc->getElementsByTagName('body');
 		$journals = array();
 		$entry = array();
-		$page_lenght = 17;
-		$numentry = 0;
-		//$skip_entry_number = $offset * $page_lenght;
-		$skip_entry_number = $offset;
+		$page_length = 10;
+		$numentry = 1;
+		//$skip_entry_number = $offset * $page_length;
 		foreach ($body->item(0)->childNodes as $node) {
 			// offset skip 
-			if($numentry <= $skip_entry_number){
+			if($numentry < $offset){
 				if($node->nodeName == 'hr') {
 					$numentry += 1;	
 				}
@@ -98,10 +100,10 @@ class LibraryCatalog {
 					}
 				}
 			} else if($node->nodeName == 'hr') { // store this node and proceed with the next one
-				if(count($journals) == $page_lenght) {
+				if(count($journals) == $page_length) {
 					break;
 				}
-				if($numentry != 16) array_push($journals, $entry);
+				array_push($journals, $entry);
 				$entry = array();
 			}
 		}
@@ -111,7 +113,8 @@ class LibraryCatalog {
 		print_r($journals);
 		print_r('</pre>');
 		*/
-		return $journals;
+		$response = array('numberofresults' => count($journals), 'nextoffset' => $offset + 10, 'results' => $journals);
+		return $response;
 	}
 
 	public function error($code) {
