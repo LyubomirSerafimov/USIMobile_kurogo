@@ -68,6 +68,8 @@ class LibraryCatalog {
 		$entry = array();
 		$page_length = 10;
 		$numentry = 1;
+		if(empty($offset)) { $offset = 1; }
+		$total = $doc->getElementsByTagName('hr')->length;
 		//$skip_entry_number = $offset * $page_length;
 		foreach ($body->item(0)->childNodes as $node) {
 			// offset skip 
@@ -113,7 +115,12 @@ class LibraryCatalog {
 		print_r($journals);
 		print_r('</pre>');
 		*/
-		$response = array('numberofresults' => count($journals), 'nextoffset' => $offset + $page_length, 'results' => $journals);
+		$nextoffset = 0;
+		if($offset + $page_length < $total) {
+			$nextoffset = $offset + $page_length;
+		}
+
+		$response = array('numberofresults' => $total, 'nextoffset' => $nextoffset, 'results' => $journals);
 		return $response;
 	}
 
