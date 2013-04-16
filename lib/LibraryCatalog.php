@@ -113,7 +113,7 @@ class LibraryCatalog {
 		print_r($journals);
 		print_r('</pre>');
 		*/
-		$response = array('numberofresults' => count($journals), 'nextoffset' => $offset + 11, 'results' => $journals);
+		$response = array('numberofresults' => count($journals), 'nextoffset' => $offset + $page_length, 'results' => $journals);
 		return $response;
 	}
 
