@@ -22,6 +22,17 @@ function getNebisSystemNumber($marc)
 	}
 }
 
+function getSBTSystemNumber($marc)
+{
+	$marc->registerXPathNamespace('marc', 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd');
+	$result=$marc->xpath('marc:datafield[@tag="035"]/marc:subfield[@code = "a"][starts-with(.,"(SBT)")]');
+	if ($result) {
+		return(substr($result[0],7));
+	} else {
+		return "";
+	}
+}
+
 function getControlField($marc, $field)
 {
 	$marc->registerXPathNamespace('marc', 'http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd');
