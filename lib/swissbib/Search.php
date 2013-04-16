@@ -29,6 +29,7 @@ function search($query, $network=false, $library=false, $offset=1) {
 			$entry['author'] = (string) getMarcField($marc, '245', 'c');
 			$entry['publisher'] = (string) getMarcField($marc, '260', 'b');
 			$entry['publishdate'] = (string) getMarcField($marc, '260', 'c');
+			$entry['nebisnumber'] = (string) getNebisSystemNumber($marc);
 
 			array_push($response['results'], $entry);
 		}

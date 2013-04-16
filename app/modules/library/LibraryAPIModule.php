@@ -53,6 +53,7 @@ class LibraryAPIModule extends APIModule {
 	// At the moment I don't have a clue why this happens. Will fix as soon
 	// as I understand how. =(
 	public function setResponse($result) {
+		header('Content-Type: application/json');
 		echo json_encode( array('response' => $result) );
 		exit;
 	}

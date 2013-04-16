@@ -80,9 +80,7 @@ class LibraryCatalog {
 				} else if(is_numeric(strpos($node->textContent, 'Collezione: '))){
 					$entry['collection'] = preg_replace('/^ *Collezione: */', '', $node->textContent);
 				} else if(is_numeric(strpos($node->textContent, 'Argomento: '))){
-					//$entry['topic'] = utf8_decode(preg_replace('/^ *Argomento: */', '', $node->textContent));
-					//$entry['topic'] = preg_replace('/^ *Argomento: */', '', $node->textContent);
-					$entry['topic'] = '12345678';
+					$entry['topic'] = preg_replace('/^ *Argomento: */', '', $node->textContent);
 				} else if(is_numeric(strpos($node->textContent, 'Segnatura: '))){
 					$entry['shelfmark'] = preg_replace('/^ *Segnatura: */', '', $node->textContent);
 				} else if(is_numeric(strpos($node->textContent, 'Ultimo fascicolo ricevuto: '))){
