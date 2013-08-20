@@ -20,7 +20,15 @@ class LibraryCatalog {
 			$offset = $params['offset'];
 		}
 
-		return search($params['query'], $network, $library, $offset);
+		$outcome = search($params['query'], $network, $library, $offset);
+		$Codelist = new Codelist();
+		for($i=0; $i < count($outcome['results']); ++$i) {
+			$library_names = array();
+			$library_names['it'] = $Codelist->getName($outcome['results'][$i]['library'], 'it');
+			$library_names['en'] = $Codelist->getName($outcome['results'][$i]['library'], 'en');
+			$outcome['results'][$i]['library_names'] = $library_names;
+		}
+		return $outcome;
 	}
 
 	public function searchJournals($params) {
