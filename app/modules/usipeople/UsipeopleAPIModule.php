@@ -25,13 +25,15 @@ class UsipeopleAPIModule extends APIModule {
 				$this->setResponseVersion(1);
 				break;
 			case 'get':
-				$usidb = new USIdb();
-				$result = $usidb->getPeople();
+				//$usidb = new USIdb();
+				//$result = $usidb->getPeople();
+				$usiSearch = new USISearch();
+				$result = $usiSearch->getPeopleList();
 				// check for errors
 				if(KurogoError::isError($result)) {
 					$this->throwError($result);
 				}
-				$this->setResponse($result);
+				$this->setResponse($result->data);
 				$this->setResponseVersion(1);
 				break;
 			default:

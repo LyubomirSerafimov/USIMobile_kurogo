@@ -81,8 +81,10 @@ class UpdatesAPIModule extends APIModule {
 	}
 
 	private function getPeopleHash(){
-		$usidb = new USIdb();
-		$hash = $usidb->getPeopleHash();
+		//$usidb = new USIdb();
+		$usiSearch = new USISearch();
+		//$hash = $usidb->getPeopleHash();
+		$hash = $usiSearch->getPeopleHash();
 		// check for errors
 		if(KurogoError::isError($hash)) {
 			$this->throwError($hash);
